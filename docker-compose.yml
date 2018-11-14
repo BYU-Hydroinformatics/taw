@@ -21,6 +21,7 @@ services:
     # Disable mounting of volumes if packages are not installed locally.
     volumes:
       - ./hapi/:/app
+      - '/app/node_modules'
     env_file:
       - ./hapi/bin/dev.env
     ports:
