@@ -1,8 +1,7 @@
-import * as actions from "./Warehouse/actions"
-
+import * as actions from './Warehouse/actions'
 export function loadApps() {
 	return dispatch =>
-		fetch(`http://localhost:3030/taw-hapi/api/1.0/app/list`)
+		fetch(`${process.env.REACT_APP_API_URL}/taw-hapi/api/1.0/app/list`)
 			.then(response => response.json())
 			.then(json => dispatch(actions.loadWHSuccess(json)))
 			.catch(error => console.log(error))
