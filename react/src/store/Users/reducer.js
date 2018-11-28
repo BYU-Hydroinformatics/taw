@@ -22,13 +22,16 @@ export default function auth(state = initialState.user, action) {
         isFetching: false,
         isAuthenticated: true,
         errorMessage: "",
-        level:1
+        level:1,
+        creds:null,
+        userDetails: action.userDetails
       })
     case LOGIN_FAILURE:
       return Object.assign({}, state, {
         isFetching: false,
         isAuthenticated: false,
-        errorMessage: action.message
+        errorMessage: action.message,
+        creds:null
       })
     case LOGOUT_SUCCESS:
       return Object.assign({}, state, {
