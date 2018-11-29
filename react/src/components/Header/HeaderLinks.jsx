@@ -46,6 +46,16 @@ class HeaderLinks extends Component {
             </NavItem>
           )}
 
+          {!isAuthenticated && (
+            <NavItem
+              eventKey={2}
+              componentClass={Link}
+              href="/register"
+              to="/register">
+              Register
+            </NavItem>
+          )}
+
           {isAuthenticated && (
             <NavItem eventKey={2} href="#" onClick={onLogoutClick}>
               Logout

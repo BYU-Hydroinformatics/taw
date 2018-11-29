@@ -11,9 +11,9 @@ import {
 import { Redirect } from "react-router-dom"
 
 import { Card } from "../../components/Card/Card.jsx"
-import { loginUser, registerUser } from "../../store/Users"
+import { registerUser } from "../../store/Users"
 
-class Login extends Component {
+class Register extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -21,23 +21,28 @@ class Login extends Component {
 
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      email: "",
+      lastname: "",
+      firstname:"",
+      about:"",
     }
   }
 
   getValidationState(key) {
-    const length = this.state[key].length
-    if (length > 8) {
-      return "success"
-    } else if (length > 0) {
-      return "warning"
-    } else if (length <= 0) {
-      return "error"
-    }
+    // const length = this.state[key].length
+    // if (length > 8) {
+    //   return "success"
+    // } else if (length > 0) {
+    //   return "warning"
+    // } else if (length <= 0) {
+    //   return "error"
+    // }
     return null
   }
 
   handleChange(e) {
+    console.log(e)
     this.setState({ [e.target.id]: e.target.value.trim() })    
   }
 
@@ -45,11 +50,15 @@ class Login extends Component {
     event.preventDefault();
     const creds = {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
+      email: this.state.email,
+      lastname: this.state.lastname,
+      firstname: this.state.firstname,
+      about: this.state.about
     }
 
     //@TODO: Validate if username and passsord are entered
-    this.props.dispatch(loginUser(creds))
+    this.props.dispatch(registerUser(creds))
   }
 
   render() {
@@ -66,7 +75,7 @@ class Login extends Component {
           <Row>
             <Col md={3} mdOffset={4}>
               <Card
-                title="Login"
+                title="Register"
                 content={
                   <form>
                     <Row>
@@ -93,6 +102,39 @@ class Login extends Component {
                             onChange={this.handleChange}
                           />
                         </FormGroup>
+                        <FormGroup
+                          controlId="lastname"
+                          validationState={this.getValidationState("lastname")}>
+                          <ControlLabel>Last Name</ControlLabel>
+                          <FormControl
+                            type="lastname"
+                            value={this.state.lastname}
+                            placeholder="Last Name"
+                            onChange={this.handleChange}
+                          />
+                        </FormGroup>
+                        <FormGroup
+                          controlId="firstname"
+                          validationState={this.getValidationState("firstname")}>
+                          <ControlLabel>First Name</ControlLabel>
+                          <FormControl
+                            type="firstname"
+                            value={this.state.firstname}
+                            placeholder="First Name"
+                            onChange={this.handleChange}
+                          />
+                        </FormGroup>
+                        <FormGroup
+                          controlId="about"
+                          validationState={this.getValidationState("about")}>
+                          <ControlLabel>About You</ControlLabel>
+                          <FormControl
+                            type="about"
+                            value={this.state.about}
+                            placeholder="About You"
+                            onChange={this.handleChange}
+                          />
+                        </FormGroup>
                       </Col>
                     </Row>
                     {errorMessage && (
@@ -107,7 +149,7 @@ class Login extends Component {
                       pullRight
                       fill
                       onClick={event => this.handleClick(event)}>
-                      Login
+                      Register
                     </Button>
                     <div className="clearfix" />
                   </form>
@@ -121,4 +163,4 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default Register

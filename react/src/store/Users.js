@@ -37,6 +37,40 @@ export function loginUser(creds) {
 	}
 }
 
+export function registerUser(creds) {
+	let config = {
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		body: `username=${creds.username}&password=${creds.password}
+		&email=${creds.email}&about=${creds.about}
+		&lastname=${creds.lasname}&password=${creds.firstname}`
+	}
+	return dispatch => {
+		// We dispatch requestLogin to kickoff the call to the API
+		dispatch(actions.requestRegister(creds))
+
+		return fetch(`${apiSessionUrl}/create`, config)
+			.then(response => {
+				return response.json().then(user => ({ user, response }))
+			})
+			.then(({ user, response }) => {
+				if (!response.ok) {
+					// If there was a problem, we want to
+					// dispatch the error condition
+					dispatch(actions.registerError(user.message))
+					return Promise.reject(user)
+				} else {
+					// If login was successful, set the token in local storage
+					localStorage.setItem("id_token", user.id_token)
+					// localStorage.setItem("access_token", user.access_token)
+					// Dispatch the success action
+					dispatch(actions.receiveRegister(user))
+				}
+			})
+			.catch(err => console.log("Error: ", err))
+	}
+}
+
 export function logoutUser() {
 	return dispatch => {
 		dispatch(actions.requestLogout())
