@@ -13,15 +13,15 @@ import { Card } from "../../components/Card/Card.jsx"
 import { FormInputs } from "../../components/FormInputs/FormInputs.jsx"
 import { UserCard } from "../../components/UserCard/UserCard.jsx"
 import Button from "../../components/CustomButton/CustomButton.jsx"
-
 import avatar from "../../assets/img/faces/face-3.jpg"
+import { updateUserProfile } from "../../store/Users"
+
 
 class UserProfile extends Component {
     constructor(props, context) {
       super(props, context)
       console.log(this.props.user.userDetails)
       // const {username, email, firstName,lastName,about} = this.props.user.userDetails
-      // console.log(username)
       this.state = {
         username: "username",
         email:"email",
@@ -30,7 +30,6 @@ class UserProfile extends Component {
         about:"about"
       }
       // this.handleChange = this.handleChange.bind(this)
-      
     }
 
     componentWillMount(){
@@ -44,6 +43,22 @@ class UserProfile extends Component {
         about: userDetails? userDetails.about: ""
       })
     }
+
+    updateProfileClick(event) {
+      event.preventDefault();
+      const creds = {
+        username: this.state.username,
+        password: this.state.password,
+        email: this.state.email,
+        fname: this.state.firstname,
+        lname: this.state.lastname,
+        about: this.state.about
+      }
+  
+      //@TODO: Validate if username and passsord are entered
+      this.props.dispatch(updateUserProfile(creds))
+    }
+
     componentDidMount(){
       // const {userDetails} = this.props.user
       // console.log(userDetails.username)

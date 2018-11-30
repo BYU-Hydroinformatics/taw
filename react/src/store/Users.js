@@ -60,6 +60,40 @@ export function registerUser(creds) {
 				} else {
 					// If login was successful, set the token in local storage
 					localStorage.setItem("id_token", user.id_token)
+					localStorage.setItem("access_token", user.access_token)
+					// Dispatch the success action
+					dispatch(actions.receiveRegister(user))
+				}
+			})
+			.catch(err => console.log("Error: ", err))
+	}
+}
+
+export function updateUserProfile(creds) {
+	let config = {
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		body: `username=${creds.username}
+		&email=${creds.email}&about=${creds.about}
+		&lname=${creds.lasname}&fname=${creds.firstname}`
+	}
+	return dispatch => {
+		// We dispatch requestLogin to kickoff the call to the API
+		dispatch(actions.requestRegister(creds))
+
+		return fetch(`${apiUseUrl}/edit`, config)
+			.then(response => {
+				return response.json().then(user => ({ user, response }))
+			})
+			.then(({ user, response }) => {
+				if (!response.ok) {
+					// If there was a problem, we want to
+					// dispatch the error condition
+					dispatch(actions.registerError(user.message))
+					return Promise.reject(user)
+				} else {
+					// If login was successful, set the token in local storage
+					localStorage.setItem("id_token", user.id_token)
 					// localStorage.setItem("access_token", user.access_token)
 					// Dispatch the success action
 					dispatch(actions.receiveRegister(user))
@@ -91,12 +125,13 @@ export function checkUserSession() {
 		if (!token || token === "") {
 			return dispatch(actions.storedCheckComplete(false))
 		}
-
-		return fetch(`${apiUseUrl}/validate`, config)
+		console.log(token)
+		return fetch(`${apiUseUrl}/session/validate`, config)
 			.then(response => {
-				return response.json().then(user => ({ user, response }))
+				return response.json().then(user => ({ user:user.cleanUser, response }))
 			})
 			.then(({ user, response }) => {
+				console.log(user)
 				if (user.user) {
 					localStorage.setItem("id_token", user.token)
 					dispatch(actions.storedCheckComplete(true))

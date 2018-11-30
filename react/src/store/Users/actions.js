@@ -14,7 +14,8 @@ export function receiveLogin(user) {
 		type: types.LOGIN_SUCCESS,
 		isFetching: false,
 		isAuthenticated: true,
-		id_token: user.id_token
+		id_token: user.id_token,
+		userDetails: user
 	}
 }
 
