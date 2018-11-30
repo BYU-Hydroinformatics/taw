@@ -1,6 +1,7 @@
 import Dashboard from "../views/Dashboard/Dashboard"
 import UserProfile from "../views/UserProfile/UserProfile"
 import Login from "../views/Login/Login"
+import Register from "../views/Register/Register"
 import ManageUsers from "../views/UserManagement/ManageUser"
 import { AllApp, AppView, EditApp } from "../views/Apps"
 import AddApp from "../views/Apps/new"
@@ -24,6 +25,13 @@ const dashboardRoutes = [
     name: "Login",
     icon: "pe-7s-unlock",
     component: Login,
+    noShow:true
+  },
+  {
+    path: "/register",
+    name: "Register",
+    icon: "pe-7s-unlock",
+    component: Register,
     noShow:true
   },
   {

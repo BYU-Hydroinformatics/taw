@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import {
   Grid,
   Row,
@@ -12,10 +13,62 @@ import { Card } from "../../components/Card/Card.jsx"
 import { FormInputs } from "../../components/FormInputs/FormInputs.jsx"
 import { UserCard } from "../../components/UserCard/UserCard.jsx"
 import Button from "../../components/CustomButton/CustomButton.jsx"
-
 import avatar from "../../assets/img/faces/face-3.jpg"
+import { updateUserProfile } from "../../store/Users"
+
 
 class UserProfile extends Component {
+    constructor(props, context) {
+      super(props, context)
+      console.log(this.props.user.userDetails)
+      // const {username, email, firstName,lastName,about} = this.props.user.userDetails
+      this.state = {
+        username: "username",
+        email:"email",
+        firstname:"firstName",
+        lastname:"lastName",
+        about:"about"
+      }
+      // this.handleChange = this.handleChange.bind(this)
+    }
+
+    componentWillMount(){
+      const {userDetails} = this.props.user
+      console.log(userDetails)
+      this.setState({
+        username: userDetails? userDetails.username: "",
+        email: userDetails? userDetails.email: "",
+        firstname: userDetails? userDetails.firstName: "",
+        lastname: userDetails? userDetails.lastname: "",
+        about: userDetails? userDetails.about: ""
+      })
+    }
+
+    updateProfileClick(event) {
+      event.preventDefault();
+      const creds = {
+        username: this.state.username,
+        password: this.state.password,
+        email: this.state.email,
+        fname: this.state.firstname,
+        lname: this.state.lastname,
+        about: this.state.about
+      }
+  
+      //@TODO: Validate if username and passsord are entered
+      this.props.dispatch(updateUserProfile(creds))
+    }
+
+    componentDidMount(){
+      // const {userDetails} = this.props.user
+      // console.log(userDetails.username)
+      // console.log(this.props.user.userDetails)
+      // this.setState({
+      //   username: userDetails.username
+      // })
+    }
+
+
   render() {
     return (
       <div className="content">
@@ -34,14 +87,14 @@ class UserProfile extends Component {
                           type: "text",
                           bsClass: "form-control",
                           placeholder: "Username",
-                          defaultValue: "michael23",
+                          defaultValue: this.state.username,
                           disabled: true
                         },
                         {
                           label: "Email address",
                           type: "email",
                           bsClass: "form-control",
-                          placeholder: "Email"
+                          defaultValue: this.state.email
                         }
                       ]}
                     />
@@ -52,15 +105,15 @@ class UserProfile extends Component {
                           label: "First name",
                           type: "text",
                           bsClass: "form-control",
-                          placeholder: "First name",
-                          defaultValue: "Mike"
+                          // placeholder: this.state.firstname,
+                          defaultValue: this.state.firstname
                         },
                         {
                           label: "Last name",
                           type: "text",
                           bsClass: "form-control",
-                          placeholder: "Last name",
-                          defaultValue: "Andrew"
+                          // placeholder: this.state.lastname,
+                          defaultValue: this.state.firstname
                         }
                       ]}
                     />
@@ -73,7 +126,7 @@ class UserProfile extends Component {
                             componentClass="textarea"
                             bsClass="form-control"
                             placeholder="Here can be your description"
-                            defaultValue="I do Water Stuff"
+                            defaultValue={this.state.about}
                           />
                         </FormGroup>
                       </Col>
@@ -86,13 +139,13 @@ class UserProfile extends Component {
                 }
               />
             </Col>
-            <Col md={4}>
+            {/* <Col md={4}>
               <UserCard
                 bgImage="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
                 avatar={avatar}
-                name="Mike Andrew"
+                name={this.state.firstname + this.state.lastname}
                 userName="michael24"
-                description={<span>I do water stuff</span>}
+                description={this.state.about}
                 socials={
                   <div>
                     <Button simple>
@@ -107,7 +160,7 @@ class UserProfile extends Component {
                   </div>
                 }
               />
-            </Col>
+            </Col> */}
           </Row>
         </Grid>
       </div>
@@ -115,4 +168,10 @@ class UserProfile extends Component {
   }
 }
 
-export default UserProfile
+function userProfileToProps(state, ownProps){
+  const {user} = state
+  return {
+    user
+  }
+}
+export default connect (userProfileToProps)(UserProfile) 
