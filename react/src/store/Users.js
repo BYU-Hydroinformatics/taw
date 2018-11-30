@@ -1,13 +1,11 @@
-import * as actions from './Users/actions'
+import * as actions from "./Users/actions"
 
-const apiSessionUrl = `${
-	process.env.REACT_APP_API_URL
-}/taw-hapi/api/1.0/user/session`
+const apiUseUrl = `http://128.187.106.130:3030/taw-hapi/api/1.0/user`
 
 export function loginUser(creds) {
 	let config = {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
 		body: `username=${creds.username}&password=${creds.password}`
 	}
 
@@ -15,7 +13,7 @@ export function loginUser(creds) {
 		// We dispatch requestLogin to kickoff the call to the API
 		dispatch(actions.requestLogin(creds))
 
-		return fetch(`${apiSessionUrl}/create`, config)
+		return fetch(`${apiUseUrl}/session/create`, config)
 			.then(response => {
 				return response.json().then(user => ({ user, response }))
 			})
@@ -27,13 +25,13 @@ export function loginUser(creds) {
 					return Promise.reject(user)
 				} else {
 					// If login was successful, set the token in local storage
-					localStorage.setItem('id_token', user.id_token)
+					localStorage.setItem("id_token", user.id_token)
 					// localStorage.setItem("access_token", user.access_token)
 					// Dispatch the success action
 					dispatch(actions.receiveLogin(user))
 				}
 			})
-			.catch(err => console.log('Error: ', err))
+			.catch(err => console.log("Error: ", err))
 	}
 }
 
@@ -43,13 +41,13 @@ export function registerUser(creds) {
 		headers: { "Content-Type": "application/x-www-form-urlencoded" },
 		body: `username=${creds.username}&password=${creds.password}
 		&email=${creds.email}&about=${creds.about}
-		&lastname=${creds.lasname}&password=${creds.firstname}`
+		&lname=${creds.lasname}&fname=${creds.firstname}`
 	}
 	return dispatch => {
 		// We dispatch requestLogin to kickoff the call to the API
 		dispatch(actions.requestRegister(creds))
 
-		return fetch(`${apiSessionUrl}/create`, config)
+		return fetch(`${apiUseUrl}/register`, config)
 			.then(response => {
 				return response.json().then(user => ({ user, response }))
 			})
@@ -74,39 +72,39 @@ export function registerUser(creds) {
 export function logoutUser() {
 	return dispatch => {
 		dispatch(actions.requestLogout())
-		localStorage.removeItem('id_token')
+		localStorage.removeItem("id_token")
 		// localStorage.removeItem("access_token")
 		dispatch(actions.receiveLogout())
 	}
 }
 
 export function checkUserSession() {
-	let token = localStorage.getItem('id_token')
+	let token = localStorage.getItem("id_token")
 	let config = {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
 		body: `token=${token}`
 	}
 
 	return dispatch => {
 		dispatch(actions.checkStoredToken())
-		if (!token || token === '') {
+		if (!token || token === "") {
 			return dispatch(actions.storedCheckComplete(false))
 		}
 
-		return fetch(`${apiSessionUrl}/validate`, config)
+		return fetch(`${apiUseUrl}/validate`, config)
 			.then(response => {
 				return response.json().then(user => ({ user, response }))
 			})
 			.then(({ user, response }) => {
 				if (user.user) {
-					localStorage.setItem('id_token', user.token)
+					localStorage.setItem("id_token", user.token)
 					dispatch(actions.storedCheckComplete(true))
 				} else {
-					localStorage.removeItem('id_token')
+					localStorage.removeItem("id_token")
 					dispatch(actions.storedCheckComplete(false))
 				}
 			})
-			.catch(err => console.log('Error: ', err))
+			.catch(err => console.log("Error: ", err))
 	}
 }

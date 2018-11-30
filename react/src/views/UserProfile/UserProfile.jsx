@@ -19,7 +19,7 @@ import avatar from "../../assets/img/faces/face-3.jpg"
 class UserProfile extends Component {
     constructor(props, context) {
       super(props, context)
-      // console.log(this.props.user.userDetails)
+      console.log(this.props.user.userDetails)
       // const {username, email, firstName,lastName,about} = this.props.user.userDetails
       // console.log(username)
       this.state = {
@@ -35,6 +35,7 @@ class UserProfile extends Component {
 
     componentWillMount(){
       const {userDetails} = this.props.user
+      console.log(userDetails)
       this.setState({
         username: userDetails? userDetails.username: "",
         email: userDetails? userDetails.email: "",

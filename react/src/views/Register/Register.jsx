@@ -103,6 +103,17 @@ class Register extends Component {
                           />
                         </FormGroup>
                         <FormGroup
+                          controlId="email"
+                          validationState={this.getValidationState("email")}>
+                          <ControlLabel>Email</ControlLabel>
+                          <FormControl
+                            type="email"
+                            value={this.state.email}
+                            placeholder="email"
+                            onChange={this.handleChange}
+                          />
+                        </FormGroup>
+                        <FormGroup
                           controlId="lastname"
                           validationState={this.getValidationState("lastname")}>
                           <ControlLabel>Last Name</ControlLabel>
