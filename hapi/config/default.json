@@ -1,13 +1,14 @@
 {
 	"app": {
 		"port": "3030",
-		"name": "hapi-starter-kit",
+		"name": "tethys-app-warehouse-api",
 		"logLevel": "info"
 	},
 	"auth": {
 		"secret": "hydroInformaticsIsAwesome",
 		"apiUser": "admin",
-		"apiPass": "admin"
+		"apiPass": "admin",
+		"enableJWTVerify": false
 	},
 	"db": {
 		"url": "mongodb://mongodb:27017",
